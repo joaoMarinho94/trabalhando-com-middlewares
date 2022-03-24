@@ -22,7 +22,7 @@ function checksExistsUserAccount(request, response, next) {
 }
 
 function checksCreateTodosUserAvailability(request, response, next) {
-  const user = request.user;
+  const { user } = request;
 
   if (user.pro) next();
 
@@ -36,7 +36,26 @@ function checksCreateTodosUserAvailability(request, response, next) {
 }
 
 function checksTodoExists(request, response, next) {
-  // Complete aqui
+  const { username } = request.headers;
+  const { id } = request.params;
+
+  const user = users.find((user) => user.id === username);
+  const todo = users.todos.find(todo => todo.id === id);
+
+  if(!user){
+    return response.status(404).json({ error: "User not found" });
+  }
+
+  if(!validate(id)){
+    return response.status(400).json({ error: "Invalid id" });
+  }
+
+  if(!todo){
+    return response.status(404).json({ error: "Todo not found" });
+  }
+
+  request.user = user
+  request.todo = todo
 }
 
 function findUserById(request, response, next) {
