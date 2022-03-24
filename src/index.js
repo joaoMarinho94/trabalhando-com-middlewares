@@ -22,7 +22,17 @@ function checksExistsUserAccount(request, response, next) {
 }
 
 function checksCreateTodosUserAvailability(request, response, next) {
-  // Complete aqui
+  const user = request.user;
+
+  if (user.pro) next();
+
+  if (user.todos.length > 10) {
+    return response
+      .status(403)
+      .json({ error: "User has reached the limit of todos" });
+  }
+
+  next();
 }
 
 function checksTodoExists(request, response, next) {
