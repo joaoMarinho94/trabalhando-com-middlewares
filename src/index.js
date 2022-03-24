@@ -56,10 +56,20 @@ function checksTodoExists(request, response, next) {
 
   request.user = user
   request.todo = todo
+
+  next();
 }
 
 function findUserById(request, response, next) {
-  // Complete aqui
+  const user = users.find(user => user.id === request.params.id);
+
+  if(!user){
+    return response.status(404).json({ error: "User not found" });
+  }
+
+  request.user = user
+
+  next();
 }
 
 app.post("/users", (request, response) => {
